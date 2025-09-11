@@ -60,7 +60,19 @@ export class UsersController {
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createUserBodySchema))
   @ApiOperation({ summary: 'Cria um novo usuario' })
-  @ApiBody({})
+    @ApiBody({ 
+    description: 'Dados do cavaleiro',
+    schema: {
+      example: {
+        name: "Gustavo Gustavo Moreira", 
+        email: "gustavogustavomoreira@casaarte.com.br",
+        password: "Gus@2030",
+        confirmPassword: "Gus@2030",
+        phone: "+5579993193264",
+        cpf: "300.579.700-76"
+      }
+    }
+  })
   @ApiResponse({ status: 201, description: 'Usuário criado com sucesso' })
   async createUser(@Body() body: CreateUserBodySchema): Promise<any> {
     try {
