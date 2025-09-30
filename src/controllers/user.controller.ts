@@ -78,8 +78,8 @@ export class UsersController {
     try {
       const {name,email,phone,cpf,password,role} = body
 
-      const userWithSameNickName = await this.prisma.user.findUnique({where: { email: email }})
-      if(userWithSameNickName) throw new HttpException("This nickname already belongs to a knight!", HttpStatus.INTERNAL_SERVER_ERROR)
+      const userWithSameNickName = await this.prisma.user.findUnique({where: { cpf: cpf }})
+      if(userWithSameNickName) throw new HttpException("This cpf already belongs to a user!", HttpStatus.INTERNAL_SERVER_ERROR)
 
       const newUser = await this.prisma.user.create({
         
