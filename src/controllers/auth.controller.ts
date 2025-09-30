@@ -38,12 +38,12 @@ export class AuthController {
   })
 
   @ApiResponse({ status: 200, description: 'Usuário autenticado com sucesso' })
-  async createUser(@Body() body: AuthBodySchema): Promise<any> {
+  async authUser(@Body() body: AuthBodySchema): Promise<any> {
     try {
       const {email,password} = body
       const authToken = await this.authService.signIn(email, password);
-      console.log(authToken);
-      return authToken;
+      const authTokenOCPP = await this.authService.signInOCPP();
+      return {authToken, authTokenOCPP};
     } catch (error) {
       console.error(error);
       throw new HttpException(`Failed to create a user: ${error?.response}`, HttpStatus.INTERNAL_SERVER_ERROR);

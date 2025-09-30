@@ -10,10 +10,10 @@ async function bootstrap() {
   const port = configService.get('PORT',{ infer: true })
 
   const config = new DocumentBuilder()
-    .setTitle('Knights API')
-    .setDescription('API para gerenciamento de cavaleiros')
+    .setTitle('2BCharge API')
+    .setDescription('API para gerenciamento de carregadores elétricos')
     .setVersion('1.0')
-    .addTag('knights')
+    .addTag('2BCharge')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
