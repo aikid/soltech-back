@@ -1,6 +1,6 @@
 import { Controller, Get, Query, Param, HttpException, HttpStatus, Post, Body, UsePipes, HttpCode, Patch, Delete } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger'
-import { AuthService } from '../auth/auth.service'
+import { AuthService } from '../services/auth.service'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 
