@@ -1,7 +1,6 @@
 import { Controller, Get, Query, Param, HttpException, HttpStatus, Post, Body, UsePipes, HttpCode, Patch, Delete, UseGuards } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { PrismaService } from '../prisma/prisma.service'
-import { AuthGuard } from 'src/guards/auth.guard';
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 
@@ -33,7 +32,7 @@ export class UsersController {
     private prisma: PrismaService
   ) {}
   
-  @UseGuards(AuthGuard)
+
   @Get()
   @ApiOperation({ summary: 'Lista todos os usuarios, com opção de filtrar apenas os admins' })
   @ApiQuery({ name: 'filter', required: false, enum: ['admins'], description: 'Filtro opcional para listar apenas os usários que são admin' })
