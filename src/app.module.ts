@@ -7,6 +7,7 @@ import { AuthController } from './controllers/auth.controller'
 import { AuthService } from './services/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { envSchema } from './env'
+import { UserService } from './services/user.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +21,6 @@ import { envSchema } from './env'
     HttpModule
   ],
   controllers: [UsersController, AuthController],
-  providers: [PrismaService, AuthService],
+  providers: [PrismaService, AuthService, UserService],
 })
 export class AppModule {}

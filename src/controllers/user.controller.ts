@@ -3,33 +3,16 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from 
 import { PrismaService } from '../prisma/prisma.service'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
+import { CreateUserBodySchema, createUserBodySchema } from '../schemas/user.schema';
+import { UserService } from '../services/user.service';
 
-const createUserBodySchema = z.object({
-  name: z.string().min(1, "O nome não pode ser vazio").max(50, "O nome esta muito longo"),
-  email: z.string().email("E-mail inválido. Informe um endereço válido."),
-  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres."),
-  phone: z.string().min(11, "O telefone é obrigatório."),
-  cpf: z.string().min(11, "O CPF é obrigatório."),
-  confirmPassword: z.string().min(6, "A senha deve ter no mínimo 6 caracteres."),
-  role: z.enum(['USER', 'ADMIN']).default('USER'),
-}).refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'As senhas não coincidem.',
-});
-
-const updateUserSchema = z.object({
-  name: z.string().min(1, "Name cannot be empty").max(15, "Name too long"),
-});
-
-
-type CreateUserBodySchema = z.infer<typeof createUserBodySchema>
-type UpdateUserSchema = z.infer<typeof updateUserSchema>
 
 @ApiTags('users')
 @Controller('/users')
 export class UsersController {
   constructor(
-    private prisma: PrismaService
+    private prisma: PrismaService,
+    private userService: UserService
   ) {}
   
 
@@ -77,23 +60,7 @@ export class UsersController {
   @ApiResponse({ status: 201, description: 'Usuário criado com sucesso' })
   async createUser(@Body() body: CreateUserBodySchema): Promise<any> {
     try {
-      const {name,email,phone,cpf,password,role} = body
-
-      const userWithSameNickName = await this.prisma.user.findUnique({where: { cpf: cpf }})
-      if(userWithSameNickName) throw new HttpException("This cpf already belongs to a user!", HttpStatus.INTERNAL_SERVER_ERROR)
-
-      const newUser = await this.prisma.user.create({
-        
-        data: {
-          name,
-          email,
-          phone,
-          cpf,
-          password,
-          role
-        },
-      });
-      return newUser;
+      return this.userService.create(body);
     } catch (error) {
       console.error(error);
       throw new HttpException(`Failed to create a user: ${error?.response}`, HttpStatus.INTERNAL_SERVER_ERROR);
